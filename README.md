@@ -22,25 +22,25 @@ Run the application:
 ### For CSV files
 
 ```sh
-java -jar target/CarTest-1.0-SNAPSHOT.jar <csvfile> <brand> <releaseDate> [releaseDate|otherSort] [table|json|xml]
+java -jar CarTest.jar <csvfile> <brand> <releaseDate> [releaseDate|otherSort] [table|json|xml]
 ```
 
 Example:
 
 ```sh
-java -jar target/CarTest-1.0-SNAPSHOT.jar doc/CarsBrand.csv Toyota 01/15/2023 releaseDate table
+java -jar CarTest.jar doc/CarsBrand.csv Toyota 01/15/2023 releaseDate table
 ```
 
 ### For XML files
 
 ```sh
-java -jar target/CarTest-1.0-SNAPSHOT.jar <xmlfile> <model> <currency> <maxPrice> [price|otherSort] [table|json|xml]
+java -jar CarTest.jar <xmlfile> <model> <currency> <maxPrice> [price|otherSort] [table|json|xml]
 ```
 
 Example:
 
 ```sh
-java -jar target/CarTest-1.0-SNAPSHOT.jar doc/carsType.xml RAV4 EUR 24000 price json
+java -jar CarTest.jar doc/carsType.xml RAV4 EUR 24000 price json
 ```
 
 ## File Structure
