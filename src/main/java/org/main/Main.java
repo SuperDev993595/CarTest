@@ -10,11 +10,11 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         if (args.length < 3) {
-            System.out.println("Usage for CSV: java -jar app.jar <csvfile> csv <brand> <MM/dd/yyyy>");
-            System.out.println("Usage for XML: java -jar app.jar <xmlfile> xml <model> <currency> <maxPrice>");
+            System.out.println("Usage for CSV: java -jar app.jar <csvfile> <brand> <MM/dd/yyyy or yyyy-MM-dd or yyyy,dd,MM>");
+            System.out.println("Usage for XML: java -jar app.jar <xmlfile> <model> <currency> <maxPrice>");
             System.out.println("Add: <sortType> <outputType>");
-            System.out.println("Example: java -jar app.jar cars.csv csv Toyota 01/15/2023 releaseDate table");
-            System.out.println("Example: java -jar app.jar cars.xml xml RAV4 EUR 24000 price json");
+            System.out.println("Example: java -jar app.jar cars.csv Toyota 01/15/2023 releaseDate table");
+            System.out.println("Example: java -jar app.jar cars.xml RAV4 EUR 24000 price json");
             return;
         }
 
@@ -36,8 +36,21 @@ public class Main {
                 cars = parser.parse(inputFile);
                 String brand = args[1];
                 LocalDate releaseDate = null;
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-                releaseDate = LocalDate.parse(args[2], dtf);
+                DateTimeFormatter formatter0 = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+                DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy,dd,MM");
+
+                try {
+                    releaseDate = LocalDate.parse(args[2], formatter1);
+                } catch (Exception e) {
+                    try {
+                        releaseDate = LocalDate.parse(args[2], formatter2);
+                    } catch (Exception e1) {
+                        releaseDate = LocalDate.parse(args[2], formatter0);
+                    }
+                }
+
+
                 filtered = CarFilter.filterByBrandAndReleaseDate(cars, brand, releaseDate);
                 if (args.length > 3) sortType = args[3];
                 if (args.length > 4) outputType = args[4];
@@ -51,12 +64,12 @@ public class Main {
             } else if (fileType.equalsIgnoreCase("xml")) {
                 parser = new XmlCarParser();
                 cars = parser.parse(inputFile);
-                String model = args[2];
-                currency = args[3];
-                double maxPrice = Double.parseDouble(args[4]);
+                String model = args[1];
+                currency = args[2];
+                double maxPrice = Double.parseDouble(args[3]);
                 filtered = CarFilter.filterByModelAndPrice(cars, model, currency, maxPrice);
-                if (args.length > 5) sortType = args[5];
-                if (args.length > 6) outputType = args[6];
+                if (args.length > 4) sortType = args[4];
+                if (args.length > 5) outputType = args[5];
                 // Sorting
                 if (sortType.equalsIgnoreCase("price")) {
                     sorted = CarSorter.sortByPriceDesc(filtered, currency);
